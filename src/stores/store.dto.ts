@@ -1,4 +1,6 @@
-import { IsString, IsNotEmpty, MinLength, MaxLength } from 'class-validator';
+import { IsString, IsNotEmpty, MinLength, MaxLength, IsArray } from 'class-validator';
+import { Product } from '../products/products.entity';
+import { Type } from 'class-transformer';
 
 export class StoreDto {
     @IsString()
@@ -16,4 +18,8 @@ export class StoreDto {
     @IsNotEmpty()
     @MaxLength(250)
     address: string;
+
+    @IsArray()
+    @Type(() => Product)
+    products?: Product[];
 }

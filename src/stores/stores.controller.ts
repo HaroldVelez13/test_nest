@@ -28,7 +28,7 @@ export class StoresController {
     }
 
     @Delete(':id')
-    async delete(@Param('id') id: number): Promise<void> {
-        this.storeService.delete(id);
+    async delete(@Param('id') id: number): Promise<number> {
+        return this.storeService.delete(id);
     }
 }

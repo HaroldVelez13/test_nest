@@ -1,5 +1,7 @@
-import { IsString, IsNotEmpty, MinLength, IsNumber, MaxLength, IsEnum } from 'class-validator';
+import { IsString, IsNotEmpty, MinLength, IsNumber, MaxLength, IsEnum, IsArray } from 'class-validator';
 import { TypesEnum } from './products.type.enum';
+import { Store } from '../stores/store.entity';
+import { Type } from 'class-transformer';
 
 export class ProductDto {
     @IsString()
@@ -15,5 +17,9 @@ export class ProductDto {
     @IsNotEmpty()
     @IsEnum(TypesEnum)
     type: TypesEnum;
+
+    @IsArray()
+    @Type(() => Store)
+    stores?: Store[];
 
 }

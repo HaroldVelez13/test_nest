@@ -3,8 +3,6 @@ import { Product } from '../products/products.entity';
 import { Store } from '../stores/store.entity';
 import { Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
-import { StoreService } from '../stores/store.service';
-import { ProductsService } from '../products/products.service';
 
 @Injectable()
 export class ProductsStoresService {
@@ -16,8 +14,15 @@ export class ProductsStoresService {
     private readonly productRepository: Repository<Product>,
   ) { }
 
-  async addStoreToProduct(productId: number, storeId: number): Promise<void> {
-    const product = await this.productRepository.findOneBy({ id: productId });
+  async addStoreToProduct(productId: number, storeId: number): Promise<Product> {
+    const product = await this.productRepository.findOne({
+      where: {
+        id: productId,
+      },
+      relations: {
+        stores: true,
+      }
+    });
     const store = await this.storeRepository.findOneBy({ id: storeId });
 
     if (!product) {
@@ -29,7 +34,8 @@ export class ProductsStoresService {
     }
 
     product.stores.push(store);
-    this.productRepository.save(product);
+    const updated_product = this.productRepository.save(product);
+    return updated_product;
   }
 
   async findStoresFromProduct(productId: number): Promise<Store[]> {
@@ -41,7 +47,7 @@ export class ProductsStoresService {
     return product.stores
   }
 
-  async findStoreFromProduct(productId: number, storeId: number): Promise<Store> | undefined {
+  async findStoreFromProduct(productId: number, storeId: number): Promise<Store> {
     const product = await this.productRepository.findOneBy({ id: productId });
 
     if (!product) {
@@ -51,7 +57,7 @@ export class ProductsStoresService {
     return product.stores.find((store) => store.id === storeId);
   }
 
-  async updateStoresFromProduct(productId: number, stores: Store[]): Promise<void> {
+  async updateStoresFromProduct(productId: number, stores: Store[]): Promise<Product> {
     const product = await this.productRepository.findOneBy({ id: productId });
 
     if (!product) {
@@ -59,10 +65,11 @@ export class ProductsStoresService {
     }
 
     product.stores = stores;
-    this.productRepository.save(product);
+    const updated_product = await this.productRepository.save(product);
+    return updated_product;
   }
 
-  async deleteStoreFromProduct(productId: number, storeId: number): Promise<void> {
+  async deleteStoreFromProduct(productId: number, storeId: number): Promise<Product> {
     const product = await this.productRepository.findOneBy({ id: productId });
 
     if (!product) {
@@ -76,6 +83,7 @@ export class ProductsStoresService {
     }
 
     product.stores.splice(storeIndex, 1);
-    this.productRepository.save(product);
+    const updated_product = await this.productRepository.save(product);
+    return updated_product
   }
 }

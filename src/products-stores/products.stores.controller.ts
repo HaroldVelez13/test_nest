@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, Delete, Put, Param } from '@nestjs/common';
 import { ProductsStoresService } from './products.store.service';
-import { Store } from 'src/stores/store.entity';
+import { Store } from '../stores/store.entity';
+import { Product } from '../products/products.entity';
 
 @Controller('products/:productId/stores')
 export class ProductsStoresController {
@@ -17,7 +18,7 @@ export class ProductsStoresController {
   async findStoreFromProduct(
     @Param('productId') productId: number,
     @Param('storeId') storeId: number,
-  ): Promise<Store | undefined> {
+  ): Promise<Store> {
     return this.storeProductService.findStoreFromProduct(productId, storeId);
   }
 
@@ -25,7 +26,7 @@ export class ProductsStoresController {
   async addStoreToProduct(
     @Param('productId') productId: number,
     @Body() body: { storeId: number },
-  ): Promise<void> {
+  ): Promise<Product> {
     return this.storeProductService.addStoreToProduct(productId, body.storeId);
   }
 
@@ -33,7 +34,7 @@ export class ProductsStoresController {
   async updateStoresFromProduct(
     @Param('productId') productId: number,
     @Body() body: { stores: Store[] },
-  ): Promise<void> {
+  ): Promise<Product> {
     return this.storeProductService.updateStoresFromProduct(productId, body.stores);
   }
 
@@ -41,7 +42,7 @@ export class ProductsStoresController {
   async deleteStoreFromProduct(
     @Param('productId') productId: number,
     @Param('storeId') storeId: number,
-  ): Promise<void> {
+  ): Promise<Product> {
     return this.storeProductService.deleteStoreFromProduct(productId, storeId);
   }
 }

@@ -41,10 +41,11 @@ export class StoreService {
         throw new NotFoundException(`No se encuentra la tienda ${id}`);
     }
 
-    async delete(id: number): Promise<void> {
+    async delete(id: number): Promise<number> {
         const store = await this.storeRepository.findOneBy({ id });
         if (store) {
-            this.storeRepository.remove(store);
+            await this.storeRepository.remove(store);
+            return id
         }
         throw new NotFoundException(`No se encuentra la tienda ${id}`);
     }
