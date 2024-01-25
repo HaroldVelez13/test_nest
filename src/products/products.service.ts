@@ -3,16 +3,12 @@ import { Product } from './products.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { ProductDto } from 'src/products/products.dto';
-import { Store } from '..//stores/store.entity';
 
 @Injectable()
 export class ProductsService {
     constructor(
         @InjectRepository(Product)
-        private readonly productRepository: Repository<Product>,
-
-        @InjectRepository(Store)
-        private readonly storeRepository: Repository<Store>,) { }
+        private readonly productRepository: Repository<Product>,) { }
 
 
     async findAll(): Promise<Product[]> {
@@ -52,6 +48,4 @@ export class ProductsService {
         }
         throw new NotFoundException(`No se encuentra el producto ${id}`);
     }
-
-
 }

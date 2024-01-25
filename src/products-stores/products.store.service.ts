@@ -12,10 +12,8 @@ export class ProductsStoresService {
   constructor(
     @InjectRepository(Store)
     private readonly storeRepository: Repository<Store>,
-    private storeService: StoreService,
     @InjectRepository(Product)
     private readonly productRepository: Repository<Product>,
-    private productService: ProductsService
   ) { }
 
   async addStoreToProduct(productId: number, storeId: number): Promise<void> {

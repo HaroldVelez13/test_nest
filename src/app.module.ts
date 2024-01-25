@@ -19,6 +19,7 @@ import { ProductsStoresModule } from './products-stores/products-stores.module';
       }),
       StoresModule,
       ProductsModule,
+      ProductsStoresModule
     ],
   controllers: [AppController],
   providers: [AppService],
