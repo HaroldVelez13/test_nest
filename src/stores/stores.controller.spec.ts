@@ -1,10 +1,10 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { StoreDto } from './store.dto';
-import { StoreService } from './store.service';
+import { StoreDto } from './stores.dto';
+import { StoresService } from './stores.service';
 import { StoresController } from './stores.controller';
 import { mockStoreService, storeMock1, storeMock2 } from './stores.mocks';
 
-describe('StoreController', () => {
+describe('StoresController', () => {
     let controller: StoresController;
 
     beforeEach(async () => {
@@ -12,7 +12,7 @@ describe('StoreController', () => {
             controllers: [StoresController],
             providers: [
                 {
-                    provide: StoreService,
+                    provide: StoresService,
                     useValue: mockStoreService,
                 },
             ],

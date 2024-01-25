@@ -1,13 +1,13 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { ProductsStoresService } from './products.store.service';
+import { ProductsStoresService } from './products.stores.service';
 import { Product } from '../products/products.entity';
-import { Store } from '../stores/store.entity';
+import { Store } from '../stores/stores.entity';
 import { mockProductRepository } from '../products/products.mocks';
 import { mockStoreRepository } from '../stores/stores.mocks';
 
 
-describe('ProductStoreService', () => {
+describe('ProductsStoresService', () => {
     let service: ProductsStoresService;
 
     beforeEach(async () => {

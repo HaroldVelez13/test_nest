@@ -1,6 +1,5 @@
 import { Entity, PrimaryGeneratedColumn, Column, ManyToMany, JoinTable } from 'typeorm';
-import { Store } from '../stores/store.entity';
-import { TypesEnum } from './products.type.enum';
+import { Store } from '../stores/stores.entity';
 
 @Entity('products')
 export class Product {

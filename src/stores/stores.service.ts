@@ -1,11 +1,11 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
-import { Store } from './store.entity';
+import { Store } from './stores.entity';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
-import { StoreDto } from 'src/stores/store.dto';
+import { StoreDto } from 'src/stores/stores.dto';
 
 @Injectable()
-export class StoreService {
+export class StoresService {
     constructor(
         @InjectRepository(Store)
         private readonly storeRepository: Repository<Store>) { }

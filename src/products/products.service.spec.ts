@@ -2,11 +2,11 @@ import { Test, TestingModule } from '@nestjs/testing';
 import { ProductsService } from './products.service';
 import { getRepositoryToken } from '@nestjs/typeorm';
 import { Product } from './products.entity';
-import { ProductDto } from './products.dto';
+import { ProductsDto } from './products.dto';
 import { mockProductRepository, productMock1, productMock2 } from './products.mocks';
 
 
-describe('ProductService', () => {
+describe('ProductsService', () => {
     let productService: ProductsService;
 
     beforeEach(async () => {
@@ -56,7 +56,7 @@ describe('ProductService', () => {
         // arrange
         const productDto = {
             ...productMock1
-        } as ProductDto;
+        } as ProductsDto;
 
 
         jest.spyOn(mockProductRepository, 'save').mockReturnValue(productMock1);
@@ -79,7 +79,7 @@ describe('ProductService', () => {
         //arrange
         const productDto = {
             ...productMock1
-        } as ProductDto;
+        } as ProductsDto;
 
 
         jest.spyOn(mockProductRepository, 'update').mockReturnValue(productMock1);

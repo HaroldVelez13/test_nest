@@ -1,18 +1,18 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { getRepositoryToken } from '@nestjs/typeorm';
-import { StoreDto } from './store.dto';
-import { Store } from './store.entity';
-import { StoreService } from './store.service';
+import { StoreDto } from './stores.dto';
+import { Store } from './stores.entity';
+import { StoresService } from './stores.service';
 import { storeMock1, storeMock2, mockStoreRepository } from './stores.mocks';
 
 
 describe('storeService', () => {
-    let storeService: StoreService;
+    let storeService: StoresService;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
             providers: [
-                StoreService,
+                StoresService,
                 {
                     provide: getRepositoryToken(Store),
                     useValue: mockStoreRepository,
@@ -20,7 +20,7 @@ describe('storeService', () => {
             ],
         }).compile();
 
-        storeService = module.get<StoreService>(StoreService);
+        storeService = module.get<StoresService>(StoresService);
     });
 
     it('should be defined', () => {

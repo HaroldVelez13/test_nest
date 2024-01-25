@@ -1,12 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProductsStoresService } from './products.store.service';
+import { ProductsStoresService } from './products.stores.service';
 import { ProductsStoresController } from './products.stores.controller';
 import { mockProducStoreService } from './products.stores.mocks';
-import { Store } from '../stores/store.entity';
+import { Store } from '../stores/stores.entity';
 import { Product } from '../products/products.entity';
 
 
-describe('UsersController', () => {
+describe('ProductsStoresController', () => {
     let controller: ProductsStoresController;
 
     beforeEach(async () => {

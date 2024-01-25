@@ -1,15 +1,15 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProductController } from './products.controller';
-import { ProductDto } from './products.dto';
+import { ProductsController } from './products.controller';
+import { ProductsDto } from './products.dto';
 import { mockProductService, productMock1, productMock2 } from './products.mocks';
 import { ProductsService } from './products.service';
 
-describe('UsersController', () => {
-    let controller: ProductController;
+describe('ProductsController', () => {
+    let controller: ProductsController;
 
     beforeEach(async () => {
         const module: TestingModule = await Test.createTestingModule({
-            controllers: [ProductController],
+            controllers: [ProductsController],
             providers: [
                 {
                     provide: ProductsService,
@@ -18,7 +18,7 @@ describe('UsersController', () => {
             ],
         }).compile();
 
-        controller = module.get<ProductController>(ProductController);
+        controller = module.get<ProductsController>(ProductsController);
     });
 
     it('should be defined', () => {
@@ -56,7 +56,7 @@ describe('UsersController', () => {
         // arrange
         const productDto = {
             ...productMock1
-        } as ProductDto;
+        } as ProductsDto;
 
         jest.spyOn(mockProductService, 'create').mockReturnValue(productMock1);
         // act
@@ -76,7 +76,7 @@ describe('UsersController', () => {
         //arrange
         const productDto = {
             ...productMock1
-        } as ProductDto;
+        } as ProductsDto;
 
         jest.spyOn(mockProductService, 'update').mockReturnValue(productMock1);
         //act
@@ -93,7 +93,7 @@ describe('UsersController', () => {
     it('remove => should find a user by a given id, remove and then return Number of affected rows', async () => {
         const productDto = {
             ...productMock1
-        } as ProductDto;
+        } as ProductsDto;
 
         jest.spyOn(mockProductService, 'delete').mockReturnValue(productMock1.id);
         //act
