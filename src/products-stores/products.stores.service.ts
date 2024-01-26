@@ -1,7 +1,7 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { Product } from '../products/products.entity';
 import { Store } from '../stores/stores.entity';
-import { Repository } from 'typeorm';
+import { In, Repository } from 'typeorm';
 import { InjectRepository } from '@nestjs/typeorm';
 
 @Injectable()
@@ -26,11 +26,11 @@ export class ProductsStoresService {
     const store = await this.storeRepository.findOneBy({ id: storeId });
 
     if (!product) {
-      throw new Error('No se encontró el producto');
+      throw new NotFoundException(`No se encontró el producto ${productId}`);
     }
 
     if (!store) {
-      throw new Error('No se encontró la tienda');
+      throw new NotFoundException(`No se encontró la tienda ${storeId}`);
     }
 
     product.stores.push(store);
@@ -39,10 +39,17 @@ export class ProductsStoresService {
   }
 
   async findStoresFromProduct(productId: number): Promise<Store[]> {
-    const product = await this.productRepository.findOneBy({ id: productId });
+    const product = await this.productRepository.findOne({
+      where: {
+        id: productId,
+      },
+      relations: {
+        stores: true,
+      }
+    });
 
     if (!product) {
-      throw new Error('No se encontró el producto');
+      throw new NotFoundException('No se encontró el producto');
     }
     return product.stores
   }
@@ -51,17 +58,26 @@ export class ProductsStoresService {
     const product = await this.productRepository.findOneBy({ id: productId });
 
     if (!product) {
-      throw new Error('No se encontró el producto');
+      throw new NotFoundException(`No se encontró el producto ${productId}}`);
+    }
+    const find = product?.stores?.find((store) => store.id === storeId) ?? false;
+    if (!find) {
+      throw new NotFoundException(`El Producto ${productId} no tiene asociada la Tienda ${storeId}`);
     }
 
     return product.stores.find((store) => store.id === storeId);
   }
 
-  async updateStoresFromProduct(productId: number, stores: Store[]): Promise<Product> {
+  async updateStoresFromProduct(productId: number, storesId: number[]): Promise<Product> {
     const product = await this.productRepository.findOneBy({ id: productId });
-
+    const stores = await this.storeRepository.find({
+      where: { id: In(storesId) }
+    })
+    if (stores.length !== storesId.length) {
+      throw new NotFoundException('Una o mas tiendas no existen');
+    }
     if (!product) {
-      throw new Error('No se encontró el producto');
+      throw new NotFoundException(`No se encontró el producto ${productId}`);
     }
 
     product.stores = stores;
@@ -70,18 +86,25 @@ export class ProductsStoresService {
   }
 
   async deleteStoreFromProduct(productId: number, storeId: number): Promise<Product> {
-    const product = await this.productRepository.findOneBy({ id: productId });
+    const product = await this.productRepository.findOne({
+      where: {
+        id: productId,
+      },
+      relations: {
+        stores: true,
+      }
+    })
 
     if (!product) {
-      throw new Error('No se encontró el producto');
+      throw new NotFoundException(`No se encontró el producto ${productId}`);
     }
-
-    const storeIndex = product.stores.findIndex((store) => store.id === storeId);
+    const storeIndex = product.stores.findIndex((store) => store.id == storeId);
 
     if (storeIndex === -1) {
-      throw new Error('La tienda no está asociada al producto');
+      throw new NotFoundException(`La tienda ${storeId} no está asociada al producto ${productId} o no existe`);
     }
-
+    const store = await this.storeRepository.findOneBy({ id: storeId });
+    await this.storeRepository.remove(store);
     product.stores.splice(storeIndex, 1);
     const updated_product = await this.productRepository.save(product);
     return updated_product

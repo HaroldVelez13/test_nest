@@ -22,7 +22,7 @@ export class ProductsStoresController {
     return this.storeProductService.findStoreFromProduct(productId, storeId);
   }
 
-  @Post()
+  @Post('add')
   async addStoreToProduct(
     @Param('productId') productId: number,
     @Body() body: { storeId: number },
@@ -30,15 +30,15 @@ export class ProductsStoresController {
     return this.storeProductService.addStoreToProduct(productId, body.storeId);
   }
 
-  @Post()
+  @Put()
   async updateStoresFromProduct(
     @Param('productId') productId: number,
-    @Body() body: { stores: Store[] },
+    @Body() body: { storesId: number[] },
   ): Promise<Product> {
-    return this.storeProductService.updateStoresFromProduct(productId, body.stores);
+    return this.storeProductService.updateStoresFromProduct(productId, body.storesId);
   }
 
-  @Post('delete-store')
+  @Delete(':storeId')
   async deleteStoreFromProduct(
     @Param('productId') productId: number,
     @Param('storeId') storeId: number,

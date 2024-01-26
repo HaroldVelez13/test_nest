@@ -17,11 +17,7 @@ export class Store {
 
     @ManyToMany(() => Product, (product) => product.stores)
     @JoinTable()
-    products: Product[];
+    products?: Product[] | null;
 
-    validate(data: any): void {
-        if (data.city.length !== 3) {
-            throw new Error('La ciudad debe tener 3 caracteres');
-        }
-    }
+
 }

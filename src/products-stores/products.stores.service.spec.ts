@@ -5,6 +5,7 @@ import { Product } from '../products/products.entity';
 import { Store } from '../stores/stores.entity';
 import { mockProductRepository } from '../products/products.mocks';
 import { mockStoreRepository } from '../stores/stores.mocks';
+import { In } from 'typeorm';
 
 
 describe('ProductsStoresService', () => {
@@ -64,48 +65,54 @@ describe('ProductsStoresService', () => {
         expect(result).toEqual(product.stores);
     });
 
-    // Should update the stores of a product when given valid inputs
-    it('should update the stores of a product when given valid inputs', async () => {
+    // should update the stores associated with the product when given valid product and store ids
+    it('should update the stores when given valid product and store ids', async () => {
         // Arrange
         const productId = 1;
-        const stores = [new Store()];
+        const storesId = [1, 2];
+        const product = new Product();
+        product.id = productId;
+        const stores: Store[] = [
+            { id: 1, name: 'Store 1', city: "ARM", address: "address 1", products: null },
+            { id: 2, name: 'Store 2', city: "CAL", address: "address 2", products: null }
+        ];
         const updatedProduct = new Product();
         updatedProduct.id = productId;
-        updatedProduct.name = 'Updated Product';
-        updatedProduct.price = 10.99;
-        updatedProduct.type = 'ABC';
         updatedProduct.stores = stores;
 
-        jest.spyOn(mockProductRepository, 'findOneBy').mockResolvedValueOnce(updatedProduct);
-        jest.spyOn(mockProductRepository, 'save').mockResolvedValueOnce(updatedProduct);
+        jest.spyOn(mockProductRepository, 'findOneBy').mockResolvedValue(product);
+        jest.spyOn(mockStoreRepository, 'find').mockResolvedValue(stores);
+        jest.spyOn(mockProductRepository, 'save').mockResolvedValue(updatedProduct);
 
         // Act
-        const result = await service.updateStoresFromProduct(productId, stores);
+        const result = await service.updateStoresFromProduct(productId, storesId);
 
         // Assert
         expect(result).toEqual(updatedProduct);
         expect(mockProductRepository.findOneBy).toHaveBeenCalledWith({ id: productId });
+        expect(mockStoreRepository.find).toHaveBeenCalledWith({ where: { id: In(storesId) } });
         expect(mockProductRepository.save).toHaveBeenCalledWith(updatedProduct);
     });
 
-    // Should return the updated product after removing the store
-    it('should return the updated product after removing the store', async () => {
+    // Should return the updated product after deleting the store
+    it('should return the updated product after deleting the store', async () => {
         // Arrange
         const productId = 1;
+        const storeId = 1;
         const product = new Product();
         product.id = productId;
-        const store = new Store()
-        product.stores = [store];
-
-        const findOneBySpy = jest.spyOn(mockProductRepository, 'findOneBy').mockResolvedValue(product);
-        const saveSpy = jest.spyOn(mockProductRepository, 'save').mockResolvedValue(product);
+        const new_store = { id: storeId, name: 'Store 1', city: "ARM", address: "address 1", products: null }
+        product.stores = [new_store];
+        const store = new Store();
+        store.id = storeId;
+        jest.spyOn(mockStoreRepository, 'remove').mockResolvedValue(undefined);
+        jest.spyOn(mockProductRepository, 'save').mockResolvedValue(product);
+        jest.spyOn(mockProductRepository, 'findOne').mockResolvedValue(product);
 
         // Act
-        const result = await service.deleteStoreFromProduct(productId, store.id);
+        const result = await service.deleteStoreFromProduct(productId, storeId);
 
         // Assert
-        expect(findOneBySpy).toHaveBeenCalledWith({ id: productId });
-        expect(saveSpy).toHaveBeenCalledWith(product);
         expect(result).toEqual(product);
     });
 

@@ -75,7 +75,7 @@ describe('ProductsStoresController', () => {
         jest.spyOn(mockProducStoreService, 'findStoreFromProduct').mockRejectedValue(new Error('No se encontró el producto'));
 
         // Act and Assert
-        await expect(controller.findStoreFromProduct(productId, storeId)).rejects.toThrowError('No se encontró el producto');
+        await expect(controller.findStoreFromProduct(productId, storeId)).rejects.toThrow('No se encontró el producto');
         expect(mockProducStoreService.findStoreFromProduct).toHaveBeenCalledWith(productId, storeId);
     });
 
@@ -87,7 +87,7 @@ describe('ProductsStoresController', () => {
         jest.spyOn(mockProducStoreService, 'addStoreToProduct').mockRejectedValue(new Error('No se encontró el producto'));
 
         // Act and Assert
-        await expect(controller.addStoreToProduct(productId, { storeId })).rejects.toThrowError('No se encontró el producto');
+        await expect(controller.addStoreToProduct(productId, { storeId })).rejects.toThrow('No se encontró el producto');
         expect(mockProducStoreService.addStoreToProduct).toHaveBeenCalledWith(productId, storeId);
     });
 
