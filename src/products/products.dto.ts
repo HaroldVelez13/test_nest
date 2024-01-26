@@ -18,8 +18,9 @@ export class ProductsDto {
     @IsEnum(TypesEnum)
     type: TypesEnum;
 
+
     @IsArray()
     @Type(() => Store)
-    stores?: Store[];
+    stores?: Store[] | null
 
 }
