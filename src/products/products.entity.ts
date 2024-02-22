@@ -12,7 +12,7 @@ export class Product {
     @Column({ name: 'price', type: 'float', nullable: false })
     price: number;
 
-    @Column({ name: 'varchar', length: 3, nullable: false })
+    @Column({ name: 'type', length: 3, nullable: false })
     type: string;
 
 
